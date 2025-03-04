@@ -8,21 +8,30 @@ from models import Base, DatasetMetadata  # Ensure models.py is correctly import
 app = Flask(__name__)
 CORS(app)  # Allow Angular to communicate with Flask
 
-# Use environment variable for database URL (Render provides this)
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:saraneyo@localhost:5432/postgres")
+#  Use Render's environment variable for PostgreSQL (Replace with Render DB URL)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise ValueError("❌ DATABASE_URL is not set! Please check your Render environment variables.")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 with app.app_context():
     Base.metadata.create_all(db.engine)
 
 # Route to check if API is working
-@app.route("/", methods=["GET"])
-def home():
-    return jsonify({"message": "Flask API is running!"})
+@app.route("/submit-metadata", methods=["POST"])
+def submit_metadata():
+    data = request.json
+    with Session(db.engine) as session:
+        new_metadata = DatasetMetadata(**data)
+        session.add(new_metadata)
+        session.commit()
 
+    return jsonify({"message": "Metadata submitted successfully!"})
 # Route to submit metadata
 @app.route("/submit-metadata", methods=["POST"])
 def submit_metadata():
@@ -76,36 +85,11 @@ def submit_metadata():
 def get_metadata():
     with Session(db.engine) as session:
         metadata_list = session.query(DatasetMetadata).all()
-        result = [
-            {
-                "id": meta.id,
-                "title": meta.title,
-                "doi": meta.doi,
-                "institution": meta.institution,
-                "release_year": meta.release_year,
-                "dataset_type": meta.dataset_type,
-                "description": meta.description,
-                "processed": meta.processed,
-                "system": meta.system,
-                "preprocessing": meta.preprocessing,
-                "numsubjects": meta.numsubjects,
-                "studies": meta.studies,
-                "experiment": meta.experiment,
-                "instruments": meta.instruments,
-                "Keys": meta.Keys,
-                "datapoints": meta.datapoints,
-                "bpms": meta.bpms,
-                "numbpms": meta.numbpms,
-                "updown": meta.updown,
-                "movements": meta.movements,
-                "movementskey": meta.movementskey,
-                "prepost": meta.prepost,
-                "lprepost": meta.lprepost,
-                "bow_stroke": meta.bow_stroke
-            }
-            for meta in metadata_list
-        ]
+        result = [meta.__dict__ for meta in metadata_list]
+        for r in result:
+            r.pop("_sa_instance_state", None)  # Remove SQLAlchemy internal state
+
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5001)), debug=True)

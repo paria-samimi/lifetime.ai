@@ -1,0 +1,114 @@
+<h2>Submit Metadata for Music Physio Analysis (MPA) </h2>
+<form (ngSubmit)="submitMetadata()" #metadataForm="ngForm">
+  <label>List of Contributors:</label>
+  <input type="text" name="contributors" [(ngModel)]="metadata.contributors" required /><br>
+
+  <label>Title of Dataset:</label>
+  <input type="text" name="title" [(ngModel)]="metadata.title" required /><br>
+
+  <label>Repository or Institution Hosting the Dataset:</label>
+  <input type="text" name="institution" [(ngModel)]="metadata.institution" required /><br>
+
+  <label>Dataset Release Year:</label>
+  <input type="number" name="release_year" [(ngModel)]="metadata.release_year" required /><br>
+
+  <label>Dataset DOI or Persistent Identifier:</label>
+  <input type="text" name="doi" [(ngModel)]="metadata.doi" /><br>
+
+  <label>Type of Dataset:</label>
+  <input type="text" name="dataset_type" [(ngModel)]="metadata.dataset_type" required /><br>
+
+  <label>Dataset Release Version:</label>
+  <input type="text" name="version" [(ngModel)]="metadata.version" /><br>
+
+  <label>Relevant Keywords for the Dataset:</label>
+  <input type="text" name="keywords" [(ngModel)]="metadata.keywords" required /><br>
+
+  <label>Contributors and Their Roles:</label>
+  <input type="text" name="contributor_roles" [(ngModel)]="metadata.contributor_roles" required /><br>
+
+  <label>Dataset/Documentation Language:</label>
+  <input type="text" name="language" [(ngModel)]="metadata.language" required /><br>
+
+  <label>Alternate/Other Identifiers used for the Dataset:</label>
+  <input type="text" name="alternate_identifiers" [(ngModel)]="metadata.alternate_identifiers" /><br>
+
+  <label>Related Publications & Datasets:</label>
+  <input type="text" name="related_publications" [(ngModel)]="metadata.related_publications" /><br>
+
+  <label>Dataset Timeline: Key Milestones:</label>
+  <input type="text" name="timeline" [(ngModel)]="metadata.timeline" /><br>
+
+  <label>Dataset File Formats:</label>
+  <input type="text" name="file_formats" [(ngModel)]="metadata.file_formats" /><br>
+
+  <label>Size of Dataset:</label>
+  <input type="text" name="dataset_size" [(ngModel)]="metadata.dataset_size" /><br>
+
+  <label>Dataset Licensing Information:</label>
+  <input type="text" name="licensing" [(ngModel)]="metadata.licensing" /><br>
+
+  <label>Dataset Funding Reference:</label>
+  <input type="text" name="funding_reference" [(ngModel)]="metadata.funding_reference" /><br>
+
+  <label>Dataset Collection Location:</label>
+  <input type="text" name="collection_location" [(ngModel)]="metadata.collection_location" /><br>
+
+  <label>Description:</label>
+  <textarea name="description" [(ngModel)]="metadata.description" required></textarea><br>
+
+  <label>What kind of processing has been done on the dataset?</label>
+  <input type="text" name="processed" [(ngModel)]="metadata.processed" /><br>
+
+  <label>What kind of system was used for data collection?</label>
+  <input type="text" name="system" [(ngModel)]="metadata.system" /><br>
+
+  <label>What preprocessing has been done?</label>
+  <input type="text" name="preprocessing" [(ngModel)]="metadata.preprocessing" /><br>
+
+  <label>How many subjects are in this study?</label>
+  <input type="number" name="numsubjects" [(ngModel)]="metadata.numsubjects" /><br>
+
+  <label>What kind of studies could users do on this dataset?</label>
+  <input type="text" name="studies" [(ngModel)]="metadata.studies" /><br>
+
+  <label>What was the experiment question of this study?</label>
+  <input type="text" name="experiment" [(ngModel)]="metadata.experiment" /><br>
+
+  <label>How many instruments did subjects use?</label>
+  <input type="text" name="instruments" [(ngModel)]="metadata.instruments" /><br>
+
+  <label>What keys are used in this study?</label>
+  <input type="text" name="Keys" [(ngModel)]="metadata.Keys" /><br>
+
+  <label>How many datapoints exist in this study?</label>
+  <input type="number" name="datapoints" [(ngModel)]="metadata.datapoints" /><br>
+
+  <label>What does BPMS mean?</label>
+  <input type="text" name="bpms" [(ngModel)]="metadata.bpms" /><br>
+
+  <label>How many BPMS are in this study?</label>
+  <input type="number" name="numbpms" [(ngModel)]="metadata.numbpms" /><br>
+
+  <label>What does "up and down" mean?</label>
+  <input type="text" name="updown" [(ngModel)]="metadata.updown" /><br>
+
+  <label>How many movements?</label>
+  <input type="text" name="movements" [(ngModel)]="metadata.movements" /><br>
+
+  <label>How many movements per key?</label>
+  <input type="text" name="movementskey" [(ngModel)]="metadata.movementskey" /><br>
+
+  <label>What kind of music is played, and how many times per pre/post measurement?</label>
+  <input type="text" name="prepost" [(ngModel)]="metadata.prepost" /><br>
+
+  <label>How long was the pre and post measurement?</label>
+  <input type="text" name="lprepost" [(ngModel)]="metadata.lprepost" /><br>
+
+  <label>What does "bow stroke" mean?</label>
+  <input type="text" name="bow_stroke" [(ngModel)]="metadata.bow_stroke" /><br>
+
+  <button type="submit">Submit Metadata</button>
+</form>
+
+

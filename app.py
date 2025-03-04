@@ -8,7 +8,7 @@ from models import Base, DatasetMetadata  # Ensure models.py is correctly import
 app = Flask(__name__)
 CORS(app)  # Allow Angular to communicate with Flask
 
-#  Use Render's environment variable for PostgreSQL
+# ✅ Use Render's environment variable for PostgreSQL
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
@@ -22,27 +22,34 @@ db = SQLAlchemy(app)
 with app.app_context():
     Base.metadata.create_all(db.engine)
 
-# ✅ Only One Function for "/submit-metadata"
+# ✅ Home Route (Prevents "Not Found" Error on Render)
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "🚀 Flask API is running!"})
+
+# ✅ Submit Metadata (Single Optimized Route)
 @app.route("/submit-metadata", methods=["POST"])
 def submit_metadata():
-    data = request.json
-    with Session(db.engine) as session:
-        new_metadata = DatasetMetadata(**data)
-        session.add(new_metadata)
-        session.commit()
+    try:
+        data = request.json
+        with Session(db.engine) as session:
+            new_metadata = DatasetMetadata(**data)
+            session.add(new_metadata)
+            session.commit()
+        return jsonify({"message": "✅ Metadata submitted successfully!"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
-    return jsonify({"message": "Metadata submitted successfully!"})
-
-# ✅ Retrieve metadata list
+# ✅ Retrieve Metadata List
 @app.route("/get-metadata", methods=["GET"])
 def get_metadata():
-    with Session(db.engine) as session:
-        metadata_list = session.query(DatasetMetadata).all()
-        result = [meta.__dict__ for meta in metadata_list]
-        for r in result:
-            r.pop("_sa_instance_state", None)  # Remove SQLAlchemy internal state
-
-    return jsonify(result)
+    try:
+        with Session(db.engine) as session:
+            metadata_list = session.query(DatasetMetadata).all()
+            result = [{k: v for k, v in meta.__dict__.items() if k != "_sa_instance_state"} for meta in metadata_list]
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5001)), debug=True)
